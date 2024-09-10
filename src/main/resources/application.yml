@@ -1,0 +1,97 @@
+# Actuator Info
+info:
+  app:
+    encoding: "@project.build.sourceEncoding@"
+    version: "@project.version@"
+  java:
+    source: "@java.version@"
+    target: "@java.version@"
+# Actuator endpoints
+management.endpoints:
+  enabled-by-default: true
+spring:
+  # Database configuration
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/car-park-finder?createDatabaseIfNotExist=true}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:1}
+
+    # PotGIS configuration
+    database-platform: org.hibernate.spatial.dialect.postgis.PostgisDialect
+    hibernate:
+      ddl-auto: update
+      show-sql: true
+      database: postgresql
+
+  # Validate schema against hibernate models
+  jpa:
+    open-in-view: false
+    datasource.driverClassName: org.h2.Driver
+    hibernate:
+      ddl-auto: none
+      naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+  # JMX disabled
+  jmx.enabled: false
+
+  # Freemarker Disabled
+  freemarker.enabled: false
+
+  # Groovy Disabled
+  groovy.template.enabled: false
+
+  # Thymeleaf disabled
+  thymeleaf.enabled: false
+
+  # Liquibase
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/changelog-master.xml
+    contexts: "!test"
+
+  servlet.multipart:
+    max-file-size: 100MB
+    max-request-size: 100MB
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+
+#Liquibase master path
+liquibase:
+  master:
+    file:
+      path: classpath:db/changelog/changelog-master.xml
+
+redis:
+  host: ${SPRING_REDIS_HOST:localhost}
+  port: ${SPRING_REDIS_PORT:6379}
+  password: ${REDIS_PASSWORD:1}
+
+server:
+  port: ${SPRING_SERVER_PORT:8080}
+  servlet.context-path: /
+  ssl:
+    # Enable ssl
+    enabled: false
+    # The format used for the keystore. It could be set to JKS in case it is a JKS file
+    key-store-type: PKCS12
+    # The path to the keystore containing the certificate
+    key-store: classpath:pkcs12/localhost.p12
+    # The password used to generate the certificate
+    key-store-password: localhost
+    # The alias mapped to the certificate
+    key-alias: localhost
+  compression:
+    mime-types: text/plain,text/css,text/xml,text/javascript,application/x-javascript,text/x-component,application/javascript,application/json,application/xml,application/rss+xml,application/atom+xml,font/truetype,font/opentype,application/vnd.ms-fontobject,image/svg+xml
+    enabled: true
+    min-response-size: 1024
+---
+# Test Profile
+spring:
+  config.activate.on-profile: test
+  datasource.url: jdbc:h2:mem:AZ;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;INIT=CREATE SCHEMA IF NOT EXISTS test;
+  datasource.driverClassName: org.h2.Driver
+  datasource.username: sa
+  datasource.password:
+  liquibase.contexts: "test"

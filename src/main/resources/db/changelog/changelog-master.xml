@@ -1,0 +1,40 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <property name="blob_type" value="BYTEA" dbms="postgresql"/>
+    <property name="blob_type" value="BLOB"/>
+    
+    <changeSet id="8dfed28e-e45f-4472-865b-03b05f0522dq" author="anonymous">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="CAR_PARK_METADATA"/>
+            </not>
+        </preConditions>
+        <createTable tableName="CAR_PARK_METADATA">
+            <column name="CAR_PARK_NO" type="NVARCHAR(10)"/>
+            <column name="ADDRESS" type="NVARCHAR(200)"/>
+            <column name="LOCATION" type="GEOMETRY(Point,4326)"/>
+            <column name="LATITUDE" type="DECIMAL"/>
+            <column name="LONGITUDE" type="DECIMAL"/>
+            <column name="RES_7_LOCATION_ID" type="NVARCHAR(15)"/>
+            <column name="RES_8_LOCATION_ID" type="NVARCHAR(15)"/>
+            <column name="RES_9_LOCATION_ID" type="NVARCHAR(15)"/>
+        </createTable>
+        <addPrimaryKey columnNames="CAR_PARK_NO"
+                       constraintName="PK_CAR_PARK_METADATA"
+                       tableName="CAR_PARK_METADATA"/>
+        <createIndex tableName="CAR_PARK_METADATA" indexName="IDX_RES_7_LOCATION_ID">
+            <column name="RES_7_LOCATION_ID"/>
+        </createIndex>
+        <createIndex tableName="CAR_PARK_METADATA" indexName="IDX_RES_8_LOCATION_ID">
+            <column name="RES_8_LOCATION_ID"/>
+        </createIndex>
+        <createIndex tableName="CAR_PARK_METADATA" indexName="IDX_RES_9_LOCATION_ID">
+            <column name="RES_9_LOCATION_ID"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
