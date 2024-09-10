@@ -30,4 +30,4 @@ More information, please check [GOV API docs](https://data.gov.sg/datasets/d_ca9
 ```cmd
 docker-compose up
 ```
-- Go to http://localhost:8080/api-docs/ui to access APT docs to test
+- Go to http://localhost:8080/api-docs/ui to access API docs to test
